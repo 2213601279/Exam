@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.exam.mapper.UserMapper">
+
+    <resultMap id="userMap" type="user">
+        <id column="uId" property="id"/>
+        <result column="name" property="name"/>
+        <collection property="roles" javaType="List" ofType="role">
+            <id column="rId" property="id"/>
+            <result column="roleName" property="roleName"/>
+        </collection>
+    </resultMap>
+
+    <select id="findUserAndRoleByUsername" parameterType="String" resultMap="userMap">
+        SELECT u.id uId,u.name,r.id rId,r.roleName
+        FROM USER u
+        LEFT JOIN user_role ur
+        ON u.id = ur.userId
+        LEFT JOIN role r
+        ON ur.roleId = r.id
+        WHERE u.name= #{primaryPrincipal};
+    </select>
+
+
+</mapper>
